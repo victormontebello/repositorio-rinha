@@ -1,21 +1,16 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
 
-	"database/sql"
-
 	_ "github.com/lib/pq"
 )
-
-/*
-POST /clientes/[id]/transacoes
-GET /clientes/[id]/extrato
-*/
 
 type TransactionPayload struct {
 	Value       int32  `json:"valor"`
@@ -24,14 +19,16 @@ type TransactionPayload struct {
 }
 
 func main() {
-	env := os.Getenv("DB_DSN")
-	if env == "" {
-		env = "host=localhost user=postgres password=postgres dbname=rinha sslmode=disable"
+	port := os.Getenv("PORT")
+	dsn := os.Getenv("DATABASE_URL")
+
+	db, err := sql.Open("postgres", dsn)
+	if err != nil {
+		log.Fatal("failed to open => ", err)
 	}
 
-	db, err := sql.Open("postgres", env)
-	if err != nil {
-		log.Fatal(err)
+	if err := db.Ping(); err != nil {
+		log.Fatal("failed to ping => ", err)
 	}
 
 	app := fiber.New()
@@ -82,5 +79,5 @@ func main() {
 		return c.Status(200).Send(response)
 	})
 
-	app.Listen(":3000")
+	app.Listen(fmt.Sprintf(":%s", port))
 }

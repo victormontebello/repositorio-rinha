@@ -5,6 +5,9 @@ go 1.21.6
 require (
 	github.com/gofiber/fiber/v2 v2.52.0
 	github.com/lib/pq v1.10.9
+	github.com/rs/zerolog v1.32.0
+	github.com/simukti/sqldb-logger v0.0.0-20230108155151-646c1a075551
+	github.com/simukti/sqldb-logger/logadapter/zerologadapter v0.0.0-20230108155151-646c1a075551
 )
 
 require (
