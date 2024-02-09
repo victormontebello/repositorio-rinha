@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 
@@ -23,8 +24,12 @@ type TransactionPayload struct {
 }
 
 func main() {
-	connStr := "user=postgres password=postgres dbname=rinha sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+	env := os.Getenv("DB_DSN")
+	if env == "" {
+		env = "host=localhost user=postgres password=postgres dbname=rinha sslmode=disable"
+	}
+
+	db, err := sql.Open("postgres", env)
 	if err != nil {
 		log.Fatal(err)
 	}
