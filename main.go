@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 
 	_ "github.com/lib/pq"
@@ -31,7 +32,10 @@ func main() {
 		log.Fatal("failed to ping => ", err)
 	}
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		JSONEncoder: sonic.Marshal,
+		JSONDecoder: sonic.Unmarshal,
+	})
 
 	app.Post("/clientes/:id/transacoes", func(c *fiber.Ctx) error {
 		id, err := c.ParamsInt("id")

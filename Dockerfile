@@ -71,8 +71,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
 #
 # USER root
 
-RUN apk add postgresql-client
-
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/
 
